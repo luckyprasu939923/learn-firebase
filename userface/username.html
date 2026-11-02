@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Userface - Firebase Person Details Inspector</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="username.css">
+</head>
+<body>
+  <div class="ambient-glow top-left"></div>
+  <div class="ambient-glow bottom-right"></div>
+
+  <div class="userface-container">
+    <!-- Top Header -->
+    <header class="userface-header">
+      <div class="header-badges">
+        <div class="badge glow-badge">
+          <span class="pulse-dot"></span>
+          Userface Portal
+        </div>
+        <div class="badge firebase-badge" title="Project: work-mock-c479f">
+          <span>🔥</span> Firebase: <code>work-mock-c479f</code>
+        </div>
+        <div class="badge firestore-badge" title="Collection: users">
+          <span>📁</span> Firestore: <code>users</code>
+        </div>
+        <a href="/" class="badge" style="text-decoration: none; color: #cbd5e1;">
+          &larr; Back to Auth Playground
+        </a>
+      </div>
+      <h1>Firebase <span class="gradient-text">Person Details</span></h1>
+      <p class="subtitle">Search by username or select any person to view their real-time profile in <strong>Firebase Authentication</strong> and <strong>Cloud Firestore</strong>.</p>
+
+      <!-- Search Bar -->
+      <form id="searchUserForm" class="search-box-container">
+        <div class="search-input-wrapper">
+          <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="usernameInput" placeholder="Enter username, email (e.g. luckyprasu939923@gmail.com), or UID..." required autocomplete="off">
+        </div>
+        <button type="submit" id="searchBtn" class="search-btn">
+          <span>Inspect Person</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </form>
+    </header>
+
+    <!-- Main Workspace Grid -->
+    <main class="userface-grid">
+      <!-- Left Column: User Directory List -->
+      <aside class="card directory-card">
+        <div class="card-title-row">
+          <div class="title-with-badge">
+            <h2>User Directory</h2>
+            <span id="userCountBadge" class="count-badge">0 Users</span>
+          </div>
+          <div class="header-action-group" style="display: flex; gap: 8px;">
+            <button id="seedDataBtn" class="icon-action-btn" title="Seed 5 Mock Users">
+              <span>+ Mock Users</span>
+            </button>
+            <button id="refreshUsersBtn" class="icon-action-btn" title="Reload from Firestore">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              <span>Refresh</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="usersListContainer" class="users-list-scroll">
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <span>Fetching users from Firebase...</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right Column: Person Details Card -->
+      <section class="card details-card" id="detailsSection">
+        <!-- Empty Placeholder when no user is selected -->
+        <div id="detailsPlaceholder" class="details-placeholder">
+          <div class="placeholder-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          </div>
+          <h3>No Person Selected</h3>
+          <p>Click on any username from the directory on the left or type a username above to load their live Firebase and Firestore details.</p>
+        </div>
+
+        <!-- Populated Person Details (Hidden until selected) -->
+        <div id="personContent" class="person-content" style="display: none;">
+          <!-- Person Header Banner -->
+          <div class="person-header-banner">
+            <div class="person-avatar" id="personAvatar">U</div>
+            <div class="person-title-info">
+              <div class="person-name-row">
+                <h2 id="personName">Loading...</h2>
+                <span id="personRole" class="role-pill">User</span>
+              </div>
+              <p id="personEmail" class="person-email">email@example.com</p>
+              <div class="uid-row">
+                <span class="uid-label">Firebase UID:</span>
+                <code id="personUid" class="uid-code">...</code>
+                <button id="copyUidBtn" class="mini-copy-btn" title="Copy UID">Copy</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metadata Quick Grid -->
+          <div class="metadata-grid">
+            <div class="meta-item">
+              <span class="meta-label">Provider</span>
+              <span id="personProvider" class="meta-value">password</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Account Created</span>
+              <span id="personCreatedAt" class="meta-value">...</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Email Verified</span>
+              <span id="personEmailVerified" class="meta-value">No</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Firestore Document</span>
+              <span id="personFirestorePath" class="meta-value">users/...</span>
+            </div>
+          </div>
+
+          <!-- Action Links to Firebase Console -->
+          <div class="console-links-row">
+            <a id="authConsoleLink" href="#" target="_blank" rel="noopener noreferrer" class="console-link auth-link">
+              <span>View in Firebase Auth Console</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
+            <a id="firestoreConsoleLink" href="#" target="_blank" rel="noopener noreferrer" class="console-link firestore-link">
+              <span>View in Cloud Firestore</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
+          </div>
+
+          <!-- Detailed JSON Payload Inspector -->
+          <div class="json-inspector-box">
+            <div class="json-header">
+              <span>Cloud Firestore Stored Document Payload</span>
+              <span class="json-badge">JSON Document</span>
+            </div>
+            <pre class="json-code"><code id="personJsonView">// Document data will appear here...</code></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="username.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "usr_mvp29iewfcd19",
+    "name": "Alex Johnson",
+    "email": "alex@example.com",
+    "password": "$2a$10$5ITR0kEq1DXL/ADSTlszi.7wdwfrCwVEx8pMflqX6pHHA1ZSZpfY2",
+    "createdAt": "2026-10-26T09:35:19.928Z"
+  },
+  {
+    "id": "usr_mvp64ldfhxt16",
+    "name": "Lucky Lucky",
+    "email": "luckyprasu939923@gmail.com",
+    "password": "$2a$10$GWDlPaKcI0FNuKO/osLGpOg4dGkCg2cU09.vQtowBhMQ3K5RTIfDy",
+    "createdAt": "2026-10-26T11:23:28.947Z"
+  },
+  {
+    "id": "usr_mvt29o6igij50",
+    "name": "Lucky Lucky",
+    "email": "luckyprasu@gmail.com",
+    "password": "FIREBASE_AUTH_MANAGED",
+    "createdAt": "2026-10-29T04:46:32.106Z"
+  }
+]
